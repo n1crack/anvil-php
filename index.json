@@ -37,6 +37,44 @@
       }
     }
   },
+  "8.2": {
+    "version": "8.2.35",
+    "preview": false,
+    "files": {
+      "cli-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-cli-linux-aarch64.tar.gz",
+        "sha256": "a6719040baabc148981e69de28e41fb996486e24b3884b9bfdd39268358f3bac"
+      },
+      "cli-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-cli-linux-x86_64.tar.gz",
+        "sha256": "8a04c5be169ca9370a9927da3b2731538a3b7a934fb665a6a4bc8e8c6f396a23"
+      },
+      "cli-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-cli-macos-aarch64.tar.gz",
+        "sha256": "67cca489b51405376dfd47e49fca6e8806bcb0d39fdd18f44946036e481eaff2"
+      },
+      "cli-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-cli-macos-x86_64.tar.gz",
+        "sha256": "f972e6f7c26edca1a6eceabbd70d2f571bb9ae425b3257c17b06345dd5c16ea5"
+      },
+      "fpm-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-fpm-linux-aarch64.tar.gz",
+        "sha256": "1f429ed7bebe4e9b4ac939716793d4335414edc765e4d2128b73088a323b54d9"
+      },
+      "fpm-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-fpm-linux-x86_64.tar.gz",
+        "sha256": "f9475fd44005174a9ad89182dd1e586e6193134fdbb5fef50f8d3b9d57b7ab27"
+      },
+      "fpm-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-fpm-macos-aarch64.tar.gz",
+        "sha256": "87fd4420aeb66e1eb061a645fdf491c77b433433562df340f28622b356ca2e68"
+      },
+      "fpm-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.2.35/php-8.2.35-fpm-macos-x86_64.tar.gz",
+        "sha256": "64c1adafb762b4a252c048a672a512c34b8b05e31736d2ab93cc8d8f9caa44e9"
+      }
+    }
+  },
   "8.4": {
     "version": "8.4.27",
     "preview": false,
