@@ -1,0 +1,40 @@
+{
+  "8.4": {
+    "version": "8.4.27",
+    "preview": false,
+    "files": {
+      "cli-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-cli-linux-aarch64.tar.gz",
+        "sha256": "c893ca0cee07c5ea7aea7582718d3affecee25ecda25b28690a46f5b4a3a9229"
+      },
+      "cli-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-cli-linux-x86_64.tar.gz",
+        "sha256": "33d0b39a3bd2f06045d5ed9a9bf340fea2281265d0b28bb640d22ba1586e0da5"
+      },
+      "cli-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-cli-macos-aarch64.tar.gz",
+        "sha256": "9ca88a001f4868be7674222d8c0650a16c883afca978eef12a82f4a5ad96c1c1"
+      },
+      "cli-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-cli-macos-x86_64.tar.gz",
+        "sha256": "330431ac5943673efa961ca987665f5990a9a28607c1618b01e072abd345b015"
+      },
+      "fpm-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-fpm-linux-aarch64.tar.gz",
+        "sha256": "964ffc23fc64ea1f617ffb5d00c744b9a2e0aded565b3f946afba60480ba0d06"
+      },
+      "fpm-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-fpm-linux-x86_64.tar.gz",
+        "sha256": "90252dc325a60de4c9e087046db34ed04ba32c43a768ad5c723675b4adec0f43"
+      },
+      "fpm-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-fpm-macos-aarch64.tar.gz",
+        "sha256": "dc78285d7b82d5cd2c603f6442d9c00e4567cc1fb770badd9068896e1dde1df9"
+      },
+      "fpm-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.4.27/php-8.4.27-fpm-macos-x86_64.tar.gz",
+        "sha256": "b2c130c06f57d40797d94fad40ae6764875f9a9ae237efee13b5f99dcad84963"
+      }
+    }
+  }
+}
