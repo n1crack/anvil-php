@@ -70,6 +70,12 @@ jobs:
           git init -q spc
           git -C spc fetch -q --depth 1 "$SPC_REPO" "$SPC_REF"
           git -C spc checkout -q FETCH_HEAD
+          # spc has phpmicro patches up to 8.5 and falls back to 8.0's for newer
+          # versions, which fail to apply. We don't build micro, so skip them there.
+          case "$MINOR" in
+            8.[1-5]) ;;
+            *) sed -i.bak 's/^SPC_MICRO_PATCHES=.*/SPC_MICRO_PATCHES=/' spc/config/env.ini ;;
+          esac
 
       - if: runner.os == 'macOS'
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
@@ -172,6 +178,7 @@ jobs:
             python3 index.py "$v" "$(jq -r .minor <<< "$b")" "$preview" "rel/$v/SHA256SUMS"
             git add index.json
             git commit -q -m "index: PHP $v"
+            git pull -q --rebase origin main
             git push -q origin HEAD:main
           done
           if [ -n "$incomplete" ]; then echo "::error::Not released, a target failed:$incomplete"; exit 1; fi
