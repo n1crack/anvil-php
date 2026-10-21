@@ -94,7 +94,7 @@ jobs:
         working-directory: spc
         run: |
           $SPC download php-src --with-php="$MINOR" -U "php-src:$SRC_URL" \
-            --for-extensions="$EXTENSIONS" --prefer-pre-built --retry=3
+            --for-extensions="$EXTENSIONS" --retry=3
           echo "$SRC_SHA256  downloads/$(basename "$SRC_URL")" | shasum -a 256 -c
 
       - name: Build
