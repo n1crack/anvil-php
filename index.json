@@ -150,5 +150,43 @@
         "sha256": "b2c130c06f57d40797d94fad40ae6764875f9a9ae237efee13b5f99dcad84963"
       }
     }
+  },
+  "8.5": {
+    "version": "8.5.12",
+    "preview": false,
+    "files": {
+      "cli-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-cli-linux-aarch64.tar.gz",
+        "sha256": "cda9dcd2a4a31b1ad2189924408d148492728997a147edb49338e2d75c6fcc9e"
+      },
+      "cli-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-cli-linux-x86_64.tar.gz",
+        "sha256": "6060a83266a83b106c5770431712da91720567e8ae492bc6280d6759512ced79"
+      },
+      "cli-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-cli-macos-aarch64.tar.gz",
+        "sha256": "4d6baaa446b4c8906d3864336fca830b0641d96b741f8f9fb1532b7b55ccee2b"
+      },
+      "cli-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-cli-macos-x86_64.tar.gz",
+        "sha256": "35a1a0b477a65ad6561bedd54c46045320368b7e6153cfb3b2ce7035c5f07dbc"
+      },
+      "fpm-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-fpm-linux-aarch64.tar.gz",
+        "sha256": "016f7f2406b306826792f9938bf3b8e082d41c2cc86c1460337553c6d170ef3d"
+      },
+      "fpm-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-fpm-linux-x86_64.tar.gz",
+        "sha256": "c197489e44e8a3fd4809b2b78a1f499375cc78076526d51c5910489752484e9d"
+      },
+      "fpm-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-fpm-macos-aarch64.tar.gz",
+        "sha256": "d782dbf5a6b99d41d6a12b9a7c9f830e8b0900e0041dd3709c109ae9a302867b"
+      },
+      "fpm-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.5.12/php-8.5.12-fpm-macos-x86_64.tar.gz",
+        "sha256": "55aabe3a4a52c23963feb9c6183a36dbedd1012292f157747484a0eb266c0a84"
+      }
+    }
   }
 }
