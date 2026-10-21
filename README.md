@@ -32,6 +32,9 @@ sockets, sodium, sqlite3, tokenizer, xml, xmlreader, xmlwriter, zip, zlib.
 
 That is static-php's "common" set plus opcache, mysqli, intl and sodium.
 
+PHP 8.6 previews take redis from phpredis' develop branch (pinned to a commit), since no
+phpredis release builds against 8.6 yet.
+
 ## Smoke test
 
 Before a release, each build must report its exact version in `php -v`, list every
