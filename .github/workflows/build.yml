@@ -1,0 +1,177 @@
+name: Build PHP
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      minors:
+        description: "Only these minors, comma separated (e.g. 8.4). Empty: all."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build
+  cancel-in-progress: false
+
+env:
+  # static-php-cli, pinned (main, 2026-08-22)
+  SPC_REPO: https://github.com/crazywhalecc/static-php-cli.git
+  SPC_REF: 956fa13e7c390e3127cc0343215c00491f13a835
+  # static-php's "common" set, plus opcache, mysqli, intl, sodium
+  EXTENSIONS: bcmath,bz2,calendar,ctype,curl,dom,exif,fileinfo,filter,ftp,gd,gmp,iconv,xml,mbstring,mbregex,mysqlnd,openssl,pcntl,pdo,pdo_mysql,pdo_sqlite,pdo_pgsql,pgsql,phar,posix,redis,session,simplexml,soap,sockets,sqlite3,tokenizer,xmlwriter,xmlreader,zlib,zip,opcache,mysqli,intl,sodium
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      builds: ${{ steps.plan.outputs.builds }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - id: plan
+        env:
+          MINORS: ${{ inputs.minors }}
+        run: |
+          python3 plan.py test
+          builds=$(python3 plan.py "$MINORS")
+          echo "$builds"
+          echo "builds=$builds" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.builds != '[]'
+    name: ${{ matrix.build.version }} ${{ matrix.target.plat }}
+    runs-on: ${{ matrix.target.os }}
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ${{ fromJSON(needs.plan.outputs.builds) }}
+        # publish expects 2 files x these 4 targets per version
+        target:
+          - { plat: macos-aarch64, os: macos-15 }
+          - { plat: macos-x86_64, os: macos-15-intel }
+          - { plat: linux-x86_64, os: ubuntu-24.04 }
+          - { plat: linux-aarch64, os: ubuntu-24.04-arm }
+    env:
+      V: ${{ matrix.build.version }}
+      PLAT: ${{ matrix.target.plat }}
+      MINOR: ${{ matrix.build.minor }}
+      SRC_URL: ${{ matrix.build.url }}
+      SRC_SHA256: ${{ matrix.build.sha256 }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - name: Fetch static-php-cli
+        run: |
+          git init -q spc
+          git -C spc fetch -q --depth 1 "$SPC_REPO" "$SPC_REF"
+          git -C spc checkout -q FETCH_HEAD
+
+      - if: runner.os == 'macOS'
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.4"
+          tools: composer
+          extensions: curl, openssl, mbstring
+          ini-values: memory_limit=-1
+
+      - name: Prepare
+        working-directory: spc
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then
+            composer install -q --no-dev --classmap-authoritative
+            bin/spc doctor --auto-fix
+            echo "SPC=bin/spc" >> "$GITHUB_ENV"
+          else
+            echo "SPC=bin/spc-alpine-docker" >> "$GITHUB_ENV"
+          fi
+
+      - name: Download sources
+        working-directory: spc
+        run: |
+          $SPC download php-src --with-php="$MINOR" -U "php-src:$SRC_URL" \
+            --for-extensions="$EXTENSIONS" --prefer-pre-built --retry=3
+          echo "$SRC_SHA256  downloads/$(basename "$SRC_URL")" | shasum -a 256 -c
+
+      - name: Build
+        working-directory: spc
+        run: |
+          start=$(date +%s)
+          $SPC build "$EXTENSIONS" --build-cli --build-fpm
+          echo "::notice::$V $PLAT built in $(( ($(date +%s) - start) / 60 )) min"
+
+      - if: failure()
+        name: Build logs
+        working-directory: spc
+        run: tail -n 150 log/* 2>/dev/null || true
+
+      - name: Smoke test
+        working-directory: spc/buildroot/bin
+        run: |
+          ./php -v | head -1 | grep -F "PHP $V (cli)"
+          ./php-fpm -v | head -1 | grep -F "PHP $V (fpm"
+          mods=$(./php -m)
+          missing=""
+          for e in ${EXTENSIONS//,/ }; do
+            case $e in
+              mbregex) ./php -r 'exit(function_exists("mb_ereg") ? 0 : 1);' || missing="$missing $e"; continue ;;
+              opcache) e="Zend OPcache" ;;
+            esac
+            grep -qixF "$e" <<< "$mods" || missing="$missing $e"
+          done
+          if [ -n "$missing" ]; then echo "::error::$V $PLAT is missing:$missing"; exit 1; fi
+          printf '[global]\nerror_log = /dev/stderr\n[www]\nlisten = 127.0.0.1:9000\npm = static\npm.max_children = 1\n' > "$RUNNER_TEMP/fpm.conf"
+          ./php-fpm -t -y "$RUNNER_TEMP/fpm.conf"
+
+      - name: Package
+        run: |
+          mkdir out
+          export COPYFILE_DISABLE=1
+          tar -czf "out/php-$V-cli-$PLAT.tar.gz" -C spc/buildroot/bin php
+          tar -czf "out/php-$V-fpm-$PLAT.tar.gz" -C spc/buildroot/bin php-fpm
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: php-${{ matrix.build.version }}-${{ matrix.target.plat }}
+          path: out/*.tar.gz
+          if-no-files-found: error
+
+  publish:
+    needs: [plan, build]
+    if: always() && needs.plan.outputs.builds != '[]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Release and index
+        env:
+          BUILDS: ${{ needs.plan.outputs.builds }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          incomplete=""
+          for b in $(jq -c '.[]' <<< "$BUILDS"); do
+            v=$(jq -r .version <<< "$b")
+            n=$(ls dist/php-$v-*.tar.gz 2>/dev/null | wc -l)
+            # all or nothing: a version is released only when every target built
+            if [ "$n" -ne 8 ]; then incomplete="$incomplete $v"; continue; fi
+            mkdir -p "rel/$v"
+            mv dist/php-$v-*.tar.gz "rel/$v/"
+            (cd "rel/$v" && sha256sum php-*.tar.gz > SHA256SUMS)
+            preview=$(jq -r .preview <<< "$b")
+            gh release create "php-$v" rel/$v/* --target main --title "PHP $v" \
+              $([ "$preview" = true ] && echo --prerelease) \
+              --notes "PHP $v built from php.net's source $(jq -r .url <<< "$b") (sha256 $(jq -r .sha256 <<< "$b")) with [static-php-cli](https://github.com/crazywhalecc/static-php-cli/tree/$SPC_REF). Extensions: $EXTENSIONS."
+            python3 index.py "$v" "$(jq -r .minor <<< "$b")" "$preview" "rel/$v/SHA256SUMS"
+            git add index.json
+            git commit -q -m "index: PHP $v"
+            git push -q origin HEAD:main
+          done
+          if [ -n "$incomplete" ]; then echo "::error::Not released, a target failed:$incomplete"; exit 1; fi
