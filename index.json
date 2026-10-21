@@ -188,5 +188,43 @@
         "sha256": "55aabe3a4a52c23963feb9c6183a36dbedd1012292f157747484a0eb266c0a84"
       }
     }
+  },
+  "8.6": {
+    "version": "8.6.0RC4",
+    "preview": true,
+    "files": {
+      "cli-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-cli-linux-aarch64.tar.gz",
+        "sha256": "3f7f15f51796b2afc920f428a734faf3835eac631c2fee1ed48545a71d2dff35"
+      },
+      "cli-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-cli-linux-x86_64.tar.gz",
+        "sha256": "0389926e80e2895873c0cd361f3f1db529fcaae6326f70af43020e858932e713"
+      },
+      "cli-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-cli-macos-aarch64.tar.gz",
+        "sha256": "83849ad3f6a453fcdf595e7c267e20f8fd5983217c91190ca20864fecbb4a9ee"
+      },
+      "cli-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-cli-macos-x86_64.tar.gz",
+        "sha256": "f68ddaf408dba4007f6a29e9871eb042939be0d8a7d1bc9e50adb8f683be7249"
+      },
+      "fpm-linux-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-fpm-linux-aarch64.tar.gz",
+        "sha256": "d54ccfe289845e5862b823add9f9a6aee042de51591f2adb41c9d4067eb3c96a"
+      },
+      "fpm-linux-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-fpm-linux-x86_64.tar.gz",
+        "sha256": "0a57d590edf44d6b519c8b88984a0a4e09c76cdcc39e9dced0c93d8fdf187755"
+      },
+      "fpm-macos-aarch64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-fpm-macos-aarch64.tar.gz",
+        "sha256": "96353edece38139f2fa82a4d68409f81777ff23c90ec2329a3c6bf004ed2237a"
+      },
+      "fpm-macos-x86_64": {
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC4/php-8.6.0RC4-fpm-macos-x86_64.tar.gz",
+        "sha256": "2502e7bbd07e1ca2541ef296afc3b26ff071b451c699a204669cf5fc5b5653e9"
+      }
+    }
   }
 }
