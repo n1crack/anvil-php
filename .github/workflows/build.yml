@@ -70,11 +70,16 @@ jobs:
           git init -q spc
           git -C spc fetch -q --depth 1 "$SPC_REPO" "$SPC_REF"
           git -C spc checkout -q FETCH_HEAD
-          # spc has phpmicro patches up to 8.5 and falls back to 8.0's for newer
-          # versions, which fail to apply. We don't build micro, so skip them there.
+          # spc knows PHP up to 8.5. For newer: skip its phpmicro patches (it falls back
+          # to 8.0's, which fail to apply; we don't build micro), 8.6's configure wants
+          # --enable-pic instead of --with-pic, and phpredis has 8.6 support only in
+          # its develop branch (pinned here) so far.
           case "$MINOR" in
             8.[1-5]) ;;
-            *) sed -i.bak 's/^SPC_MICRO_PATCHES=.*/SPC_MICRO_PATCHES=/' spc/config/env.ini ;;
+            *)
+              sed -i.bak -e 's/^SPC_MICRO_PATCHES=.*/SPC_MICRO_PATCHES=/' -e 's/--with-pic/--enable-pic/' spc/config/env.ini
+              echo "EXTRA_SOURCES=-U redis:https://codeload.github.com/phpredis/phpredis/tar.gz/4366a579e52a35a6150e2c0e61c1c3a89c6f8484" >> "$GITHUB_ENV"
+              ;;
           esac
 
       - if: runner.os == 'macOS'
@@ -99,7 +104,7 @@ jobs:
       - name: Download sources
         working-directory: spc
         run: |
-          $SPC download php-src --with-php="$MINOR" -U "php-src:$SRC_URL" \
+          $SPC download php-src --with-php="$MINOR" -U "php-src:$SRC_URL" $EXTRA_SOURCES \
             --for-extensions="$EXTENSIONS" --retry=3
           echo "$SRC_SHA256  downloads/$(basename "$SRC_URL")" | shasum -a 256 -c
 
