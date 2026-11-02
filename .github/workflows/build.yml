@@ -23,6 +23,8 @@ env:
   SPC_REF: 956fa13e7c390e3127cc0343215c00491f13a835
   # static-php's "common" set, plus opcache, mysqli, intl, sodium
   EXTENSIONS: bcmath,bz2,calendar,ctype,curl,dom,exif,fileinfo,filter,ftp,gd,gmp,iconv,xml,mbstring,mbregex,mysqlnd,openssl,pcntl,pdo,pdo_mysql,pdo_sqlite,pdo_pgsql,pgsql,phar,posix,redis,session,simplexml,soap,sockets,sqlite3,tokenizer,xmlwriter,xmlreader,zlib,zip,opcache,mysqli,intl,sodium
+  # gd only builds JPEG, FreeType, WebP and AVIF support when these libs are built too
+  GD_LIBS: libjpeg,freetype,libwebp,libavif
   GH_TOKEN: ${{ github.token }}
 
 jobs:
@@ -112,7 +114,7 @@ jobs:
         working-directory: spc
         run: |
           start=$(date +%s)
-          $SPC build "$EXTENSIONS" --build-cli --build-fpm
+          $SPC build "$EXTENSIONS" --with-libs="$GD_LIBS" --build-cli --build-fpm
           echo "::notice::$V $PLAT built in $(( ($(date +%s) - start) / 60 )) min"
 
       - if: failure()
@@ -133,6 +135,9 @@ jobs:
               opcache) e="Zend OPcache" ;;
             esac
             grep -qixF "$e" <<< "$mods" || missing="$missing $e"
+          done
+          for f in JPEG FreeType WebP AVIF; do
+            ./php -r "exit(empty(gd_info()['$f Support']) ? 1 : 0);" || missing="$missing gd-$f"
           done
           if [ -n "$missing" ]; then echo "::error::$V $PLAT is missing:$missing"; exit 1; fi
           printf '[global]\nerror_log = /dev/stderr\n[www]\nlisten = 127.0.0.1:9000\npm = static\npm.max_children = 1\n' > "$RUNNER_TEMP/fpm.conf"
@@ -170,6 +175,8 @@ jobs:
           incomplete=""
           for b in $(jq -c '.[]' <<< "$BUILDS"); do
             v=$(jq -r .version <<< "$b")
+            tag=$(jq -r .tag <<< "$b")
+            build=$(jq -r .build <<< "$b")
             n=$(ls dist/php-$v-*.tar.gz 2>/dev/null | wc -l)
             # all or nothing: a version is released only when every target built
             if [ "$n" -ne 8 ]; then incomplete="$incomplete $v"; continue; fi
@@ -177,12 +184,12 @@ jobs:
             mv dist/php-$v-*.tar.gz "rel/$v/"
             (cd "rel/$v" && sha256sum php-*.tar.gz > SHA256SUMS)
             preview=$(jq -r .preview <<< "$b")
-            gh release create "php-$v" rel/$v/* --target main --title "PHP $v" \
+            gh release create "$tag" rel/$v/* --target main --title "PHP $v (build $build)" \
               $([ "$preview" = true ] && echo --prerelease) \
               --notes "PHP $v built from php.net's source $(jq -r .url <<< "$b") (sha256 $(jq -r .sha256 <<< "$b")) with [static-php-cli](https://github.com/crazywhalecc/static-php-cli/tree/$SPC_REF). Extensions: $EXTENSIONS."
-            python3 index.py "$v" "$(jq -r .minor <<< "$b")" "$preview" "rel/$v/SHA256SUMS"
+            python3 index.py "$b" "rel/$v/SHA256SUMS"
             git add index.json
-            git commit -q -m "index: PHP $v"
+            git commit -q -m "index: PHP $v build $build"
             git pull -q --rebase origin main
             git push -q origin HEAD:main
           done

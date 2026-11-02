@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Prints the PHP versions to build as a JSON list: the newest release of each
-minor that has no GitHub release here yet.
+minor that has no GitHub release of the current BUILD here yet.
 
 Stable versions come from php.net's releases JSON. A minor with no stable
 release yet (8.6) uses the newest php-src tag, built from the tarball php.net
@@ -16,6 +16,15 @@ import sys
 import urllib.request
 
 MINORS = ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"]
+
+# Bump when the build changes (libraries, flags): every minor's newest version is built
+# again, released as php-<version>-b<BUILD>, and Anvil installs it over the same version.
+# Build 1 (before builds were counted) is php-<version>.
+BUILD = 2
+
+
+def tag(version, build=BUILD):
+    return f"php-{version}" if build == 1 else f"php-{version}-b{build}"
 
 
 def get(url):
@@ -65,6 +74,8 @@ def main():
         order = ["8.6.0alpha1", "8.6.0alpha3", "8.6.0beta1", "8.6.0RC1", "8.6.0RC10", "8.6.0"]
         assert sorted(reversed(order), key=tag_key) == order
         assert tag_key("8.6.0-dev") is None
+        assert tag("8.5.12", 1) == "php-8.5.12"
+        assert tag("8.5.12", 2) == "php-8.5.12-b2"
         print("ok")
         return
     only = sys.argv[1].split(",") if len(sys.argv) > 1 and sys.argv[1] else MINORS
@@ -74,8 +85,8 @@ def main():
     todo = []
     for minor in only:
         b = stable(minor) or preview(minor)
-        if b and f"php-{b['version']}" not in published:
-            todo.append(b)
+        if b and tag(b["version"]) not in published:
+            todo.append(b | {"build": BUILD, "tag": tag(b["version"])})
     print(json.dumps(todo))
 
 
