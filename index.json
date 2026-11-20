@@ -195,41 +195,41 @@
     }
   },
   "8.6": {
-    "version": "8.6.0RC7",
-    "preview": true,
+    "version": "8.6.0",
+    "preview": false,
     "build": 2,
     "files": {
       "cli-linux-aarch64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-cli-linux-aarch64.tar.gz",
-        "sha256": "d8dff7962b5f9d8e46091aea201331210403b58984c4dd436c6f0a86b18c5fc6"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-cli-linux-aarch64.tar.gz",
+        "sha256": "8c4c4194c359da7eebec17cac4ac00ee4f34a588a2e076ad9cd3bcde1864430f"
       },
       "cli-linux-x86_64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-cli-linux-x86_64.tar.gz",
-        "sha256": "42b240c85e092ee1d7c352bbbb0056a7a8bd71aac69b73459f038c14e9537491"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-cli-linux-x86_64.tar.gz",
+        "sha256": "ef23421e8b87e16ba280f5b63085b074386305a75fc4b6845540e8352636e829"
       },
       "cli-macos-aarch64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-cli-macos-aarch64.tar.gz",
-        "sha256": "109b98c884743f741f7b0c4504197f4e5d4032aafd6d0ef5243fb1cea998b765"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-cli-macos-aarch64.tar.gz",
+        "sha256": "6232086af4342b1a57e48e40fea1eac695e63b97feab26b96e70f66e94d70539"
       },
       "cli-macos-x86_64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-cli-macos-x86_64.tar.gz",
-        "sha256": "cad429d6df121a84c9ee7ec45886026cc8dc67bdca00de8cc2c2842b468af76a"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-cli-macos-x86_64.tar.gz",
+        "sha256": "210839c9ab5773783b926a39f854544f55a0794cd718141c74e96bfd11d48fc2"
       },
       "fpm-linux-aarch64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-fpm-linux-aarch64.tar.gz",
-        "sha256": "48f95877ced207296263ce9e355a88d55a9f1a013e88f1e5bab09677cb92bbe0"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-fpm-linux-aarch64.tar.gz",
+        "sha256": "28ecc1242882007f72479976ff88ea1142e5edb8ae666ba948afb3e3686471ac"
       },
       "fpm-linux-x86_64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-fpm-linux-x86_64.tar.gz",
-        "sha256": "bb83274fc89cb92ae5ec3354759e4a76c84307c1074ccf29b6c8a9d1b37bffa4"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-fpm-linux-x86_64.tar.gz",
+        "sha256": "87bfc94576ecef89d93e6fdf65b817697eafe1405490dfcd808bd8fb1a7c797d"
       },
       "fpm-macos-aarch64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-fpm-macos-aarch64.tar.gz",
-        "sha256": "1038a0930f9c4e805d9120d7f578cb32f545dfaddf129ed04aeb5283a75c9827"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-fpm-macos-aarch64.tar.gz",
+        "sha256": "f3ae02d789feb390c9126d14ac5c0e25e0b1d959539aa824b4e6cc8feab1412c"
       },
       "fpm-macos-x86_64": {
-        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0RC7-b2/php-8.6.0RC7-fpm-macos-x86_64.tar.gz",
-        "sha256": "444756280f66a46e89d5bd67a272455c5e6bd1af984de58d5b1568aa8da1a55e"
+        "url": "https://github.com/n1crack/anvil-php/releases/download/php-8.6.0-b2/php-8.6.0-fpm-macos-x86_64.tar.gz",
+        "sha256": "2aa087fa2d700569126d3e885cf35e1d57b31c61fe164e989df3b5f57edd8988"
       }
     }
   }
